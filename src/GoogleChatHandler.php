@@ -23,10 +23,17 @@ class GoogleChatHandler extends AbstractProcessingHandler
         'EMERGENCY' => '#E01E5A',
     ];
 
-    public function __construct(string $webhookUrl, int|string|Level $level = Level::Error, bool $bubble = true)
-    {
+    protected ?string $username;
+
+    public function __construct(
+        string $webhookUrl,
+        ?string $username = null,
+        int|string|Level $level = Level::Error,
+        bool $bubble = true
+    ) {
         parent::__construct($level, $bubble);
         $this->webhookUrl = $webhookUrl;
+        $this->username = $username;
     }
 
     protected function write(LogRecord $record): void
@@ -35,7 +42,8 @@ class GoogleChatHandler extends AbstractProcessingHandler
             return;
         }
 
-        $title = strtoupper(config('app.env') . '-' . config('app.name') . ' LOG');
+        $title = $this->username
+            ?: strtoupper(config('app.env') . '-' . config('app.name') . ' LOG');
         $level = $record->level->getName();
         $color = self::LEVEL_COLORS[$level] ?? '#E01E5A';
 

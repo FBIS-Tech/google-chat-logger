@@ -26,6 +26,7 @@ In `config/logging.php`:
     'handler' => \FbisTech\GoogleChatLogger\GoogleChatHandler::class,
     'with'    => [
         'webhookUrl' => env('GOOGLE_CHAT_WEBHOOK_URL'),
+        'username'   => strtoupper(env('APP_ENV', 'DEV') . '-' . env('APP_NAME') . ' LOG'),
     ],
     'level'   => env('LOG_LEVEL', 'error'),
 ],
@@ -33,4 +34,4 @@ In `config/logging.php`:
 
 Add `google_chat` to your `stack` channel, and set `GOOGLE_CHAT_WEBHOOK_URL` in `.env`.
 
-The footer title is built from `APP_ENV` and `APP_NAME`.
+`username` sets the name shown in each card's footer. If omitted, it defaults to `{APP_ENV}-{APP_NAME} LOG`.
